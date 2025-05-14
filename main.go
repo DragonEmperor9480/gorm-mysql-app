@@ -26,6 +26,31 @@ func main() {
 	if err != nil {
 		panic("Failed to auto-migrate schema!")
 	}
-	fmt.Println("✅ Migration complete!")
 
+	//Insert data
+	users := []User{
+		{Name: "Alice", Email: "test1234@gmail.com", Age: 25},
+		{Name: "Alice2", Email: "test12341@gmail.com", Age: 26},
+		{Name: "Alice3", Email: "test12342@gmail.com", Age: 27},
+	}
+
+	result := db.Create(&users)
+
+	if result.Error != nil {
+		fmt.Println("Error inserting Data:", result.Error)
+	} else {
+		fmt.Println("Data inserted sucessfully!")
+	}
+
+	//Fetch data
+	var FetchUsers []User
+	res := db.Find((&FetchUsers))
+	if res.Error != nil {
+		fmt.Println("Error fetching users:", result.Error)
+	} else {
+		fmt.Println("Fetched users:")
+		for _, user := range FetchUsers {
+			fmt.Printf("ID: %d, Name: %s,Age:%d\n ", user.ID, user.Name, user.Age)
+		}
+	}
 }
